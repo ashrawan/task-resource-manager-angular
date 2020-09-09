@@ -1,0 +1,39 @@
+<div class="col-12">
+
+  <div class="card">
+    <div class="card-header">{{isEdit ? 'Update Task' : 'Task Details'}}</div>
+
+    <div class="card-body">
+
+      <ng-container *ngTemplateOutlet="messageBlock"></ng-container>
+      <app-dynamic-form-builder *ngIf="isEdit && task"
+                                [dynamicFormModel]="updateTaskDynamicFormModel"
+                                [isUpdate]="true"
+                                [patchValue]="task"
+                                [resetForm]="isFormReset"
+                                (formSubmit)="onTaskUpdateFormSubmit($event)">
+      </app-dynamic-form-builder>
+
+      <ng-template *ngIf="!isEdit">
+        <ng-container *ngTemplateOutlet="viewUser"></ng-container>
+      </ng-template>
+
+    </div>
+  </div>
+
+</div>
+
+<ng-template #viewUser>
+  <span>View Task</span>
+</ng-template>
+
+<ng-template #messageBlock>
+  <div *ngIf="!!responseMessage">
+
+    <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+      {{ responseMessage }}<a *ngIf="task" class="ml-2 btn btn-info btn-sm" [routerLink]="API_ROUTES.TASK_DETAILS + '/' + task.id">
+      <span>View</span>
+    </a>
+    </ngb-alert>
+  </div>
+</ng-template>

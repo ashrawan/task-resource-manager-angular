@@ -1,0 +1,8 @@
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs" [ngClass]="{active: breadcrumb.active}">
+    <ng-container *ngIf="breadcrumb.link && !breadcrumb.active else currentBreadcrumb">
+      <a *ngIf="breadcrumb.link && !breadcrumb.active" [routerLink]="breadcrumb.link">{{breadcrumb.text}}</a>
+    </ng-container>
+    <ng-template #currentBreadcrumb>{{breadcrumb.text}}</ng-template>
+    <span *ngIf="!breadcrumb.link">{{breadcrumb.text}}</span></li>
+</ol>

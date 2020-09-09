@@ -1,0 +1,24 @@
+<div class="form-group col-12">
+  <label class="form-control-label" [attr.for]="formField.label">
+    {{formField.label}}
+    <strong class="text-danger" *ngIf="showRequiredLabel">*</strong>
+  </label>
+  <ng-container class="col-12" [ngSwitch]="formField.type">
+    <app-textbox *ngSwitchCase="'text'" [field]="formField" [form]="formGroup"></app-textbox>
+    <app-textbox *ngSwitchCase="'password'" [field]="formField" [form]="formGroup"></app-textbox>
+    <app-date *ngSwitchCase="'date'" [field]="formField" [form]="formGroup"></app-date>
+    <app-selectbox *ngSwitchCase="'select'" [field]="formField" [form]="formGroup"></app-selectbox>
+    <!--    <app-checkbox *ngSwitchCase="'checkbox'" [field]="formField" [form]="formGroup"></app-checkbox>-->
+    <!--    <app-radio *ngSwitchCase="'radio'" [field]="formField" [form]="formGroup"></app-radio>-->
+    <app-file *ngSwitchCase="'file'" [field]="formField" [form]="formGroup"></app-file>
+    <app-custom-resource-file *ngSwitchCase="'CUSTOM_RESOURCE_UPLOAD'" [field]="formField" [form]="formGroup"></app-custom-resource-file>
+
+  </ng-container>
+
+<!--    <div *ngIf="!formField.disableValidation && isTouched && !isValid" class="invalid-feedback">-->
+<!--      <div *ngIf="formGroup.controls[formField.name].errors.required">-->
+<!--        {{formField.fieldValidators.requiredMsg ? formField.fieldValidators.requiredMsg : formField.label + ' is required' }}-->
+<!--      </div>-->
+<!--    </div>-->
+
+</div>

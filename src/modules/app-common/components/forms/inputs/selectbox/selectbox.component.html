@@ -1,0 +1,35 @@
+<div [formGroup]="form">
+
+  <ng-template [ngIf]="inputSelect.bindValue !== 'object()'" [ngIfElse]="objectSelect">
+    <ng-select [items]="items"
+               [ngClass]="isTouched ? isValid ? 'is-valid' : 'is-invalid' : ''"
+               dropdownPosition="auto"
+               [placeholder]="inputSelect.placeholder"
+               [bindLabel]="inputSelect.bindLabel"
+               [bindValue]="inputSelect.bindValue"
+               [labelForId]="field.name"
+               [formControlName]="field.name">
+    </ng-select>
+  </ng-template>
+
+  <ng-template #objectSelect>
+    <ng-select [items]="items"
+               [ngClass]="isTouched ? isValid ? 'is-valid' : 'is-invalid' : ''"
+               [placeholder]="inputSelect.placeholder"
+               [virtualScroll]="true"
+               [bindLabel]="inputSelect.bindLabel"
+               [labelForId]="field.name"
+               [formControlName]="field.name">
+      <!--    <ng-template ng-option-tmp let-item="item" let-search="searchTerm">-->
+      <!--      <div><span>Title: </span><span [ngOptionHighlight]="search">{{item.title}}</span></div>-->
+      <!--      <small><b>Id:</b> {{item.id}} | <b>UserId:</b> {{item.userId}}</small>-->
+      <!--    </ng-template>-->
+    </ng-select>
+  </ng-template>
+
+  <div *ngIf="!field.disableValidation && isTouched && !isValid" class="invalid-feedback">
+    <div *ngIf="form.controls[field.name].errors.required">
+      {{field.fieldValidators.requiredMsg ? field.fieldValidators.requiredMsg : field.label + ' is required' }}
+    </div>
+  </div>
+</div>

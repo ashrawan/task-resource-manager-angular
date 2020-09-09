@@ -1,0 +1,52 @@
+<ng-template [ngIf]="!isChildForm" [ngIfElse]="dynamicFormWrapper">
+  <ng-container *ngTemplateOutlet="mainFormWrapper"></ng-container>
+</ng-template>
+
+<ng-template #mainFormWrapper>
+  <form (ngSubmit)="onFormSubmission()" [formGroup]="currentForm" class="form-horizontal"
+        novalidate>
+
+    <ng-container *ngTemplateOutlet="dynamicFormWrapper"></ng-container>
+
+    <div class="text-center">
+      <!--      <button type="button" class="btn btn-lg btn-primary" [ngClass]="{disabled: currentForm.invalid}" [disabled]="currentForm.invalid">Submit</button>-->
+      <button class="btn btn-primary">Submit</button>
+    </div>
+
+  </form>
+</ng-template>
+
+
+<ng-template #dynamicFormWrapper>
+  <ng-container *ngFor="let dynamicFormGroup of dynamicFormModel">
+    <div [ngClass]="dynamicFormGroup.className ? dynamicFormGroup.className : 'row'">
+
+      <ng-container *ngFor="let formField of dynamicFormGroup.formFields">
+
+        <ng-container *ngIf="!isUpdate || !formField.disableOnUpdate">
+          <ng-container *ngIf="formField.subFormGroup">
+            <h4 class="col-12">{{formField.label}}</h4>
+            <div [ngClass]="dynamicFormGroup.className ? dynamicFormGroup.className : 'col-12'">
+              <app-dynamic-form-builder [isChildForm]="true"
+                                        [currentForm]="currentForm.get(formField.name)"
+                                        [resetForm]="resetForm"
+                                        [patchValue]="patchValue[formField.name]"
+                                        [dynamicFormModel]="formField.subFormGroup">
+              </app-dynamic-form-builder>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="formField.type !== 'none' && !formField.subFormGroup">
+            <div *ngIf="!formField.isReadOnly" [ngClass]="formField.className ? formField.className: 'col-12'">
+              <app-input-builder [formField]="formField"
+                                 [formGroup]="currentForm">
+              </app-input-builder>
+            </div>
+          </ng-container>
+        </ng-container>
+
+      </ng-container>
+
+    </div>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,61 @@
+<div *ngIf="task">
+
+  <div class="row">
+    <div class="col-12">
+      <div class="profile-img text-secondary">
+        <!--      <img src="assets/image/placehold450.png" class="employee-profile-img" alt="profile image"/>-->
+      </div>
+    </div>
+
+    <div class="col-12">
+      <h5>Title: <span class="font-weight-bold text-success">{{task.title}}</span></h5>
+
+      <hr/>
+
+      <p>Description: {{task.description}}</p>
+      <p>Status: {{task.status}}</p>
+      <p>Starting Date : <span>{{task.startDate | date :'medium'}}</span></p>
+      <p>End Deadline : <span>{{task.endDate | date :'medium'}}</span></p>
+    </div>
+  </div>
+
+
+  <div class="row border-top">
+    <div class="col-6 mt-3">
+
+      <div *ngIf="task.assignedTo" class="col-6 border-right">
+        <h5 class="text-success">Assigned To</h5>
+        <p><span>Full Name: </span>
+          <a class="pl-2 btn-link" [routerLink]="API_ROUTES.USER_DETAILS + '/' + task.assignedTo.id">
+            <span>{{task.assignedTo.fullName}}</span>
+          </a>
+        </p>
+        <p>Status: {{task.assignedTo.status}}</p>
+      </div>
+
+      <div *ngIf="task.reportTo" class="col-6">
+        <h5 class="text-success">Report To</h5>
+        <p>Full Name:
+          <a class="pl-2 btn-link" [routerLink]="API_ROUTES.USER_DETAILS + '/' + task.reportTo.id">
+            <span>{{task.reportTo.fullName}}</span>
+          </a>
+        </p>
+        <p>Status: {{task.reportTo.status}}</p>
+      </div>
+
+    </div>
+
+    <div *ngIf="task.taskResources.length > 0" class="col-6">
+      <ol>
+        <ng-container *ngFor="let resource of task.taskResources; let i= index">
+          <li (click)="downloadResource(resource)" class="btn-link">
+            {{ resource.resourceName }}
+            <fa-icon [icon]='["fas", "download"]'></fa-icon>
+          </li>
+        </ng-container>
+      </ol>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,25 @@
+<div [formGroup]="form" class="input-group">
+
+  <ng-template [ngIf]="field.isSubForm" [ngIfElse]="dateInput">
+    <ng-container [formGroupName]="field.name">
+      <ng-container *ngTemplateOutlet="dateInput"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #dateInput>
+    <input [attr.type]="field.type"
+           [ngClass]="isTouched ? isValid ? 'is-valid' : 'is-invalid' : ''"
+           class="form-control"
+           [id]="field.name"
+           [name]="field.name"
+           [placeholder]="inputDate.placeholder"
+           [formControlName]="field.name"/>
+  </ng-template>
+
+  <div *ngIf="!field.disableValidation && isTouched && !isValid" class="invalid-feedback">
+    <div *ngIf="form.controls[field.name].errors.required">
+      {{field.fieldValidators.requiredMsg ? field.fieldValidators.requiredMsg : field.label + ' is required' }}
+    </div>
+  </div>
+
+</div>

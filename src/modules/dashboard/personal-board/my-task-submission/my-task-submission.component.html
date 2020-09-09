@@ -1,0 +1,33 @@
+<div class="col-12">
+
+  <div class="card">
+    <div class="card-header">{{'Submit Task'}}</div>
+
+    <div class="card-body">
+
+      <ng-container *ngTemplateOutlet="messageBlock"></ng-container>
+      <app-dynamic-form-builder *ngIf="task"
+                                [dynamicFormModel]="submissionTaskDynamicFormModel"
+                                [isUpdate]="true"
+                                [patchValue]="task"
+                                [resetForm]="isFormReset"
+                                (formSubmit)="onTaskSubmissionFormSubmit($event)">
+      </app-dynamic-form-builder>
+
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #messageBlock>
+  <div *ngIf="!!responseMessage">
+
+    <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+      {{ responseMessage }}<a *ngIf="task" class="ml-2 btn btn-info btn-sm"
+                              [routerLink]="API_ROUTES.TASK_DETAILS + '/' + task.id">
+      <span>View</span>
+    </a>
+    </ngb-alert>
+  </div>
+</ng-template>

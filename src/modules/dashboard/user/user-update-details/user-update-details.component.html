@@ -1,0 +1,41 @@
+<div class="col-12">
+
+  <div class="card">
+    <div class="card-header">{{isEdit ? 'Update User' : 'User Details'}}</div>
+
+    <div class="card-body">
+
+      <ng-container *ngTemplateOutlet="messageBlock"></ng-container>
+      <app-dynamic-form-builder *ngIf="isEdit && user"
+                                [dynamicFormModel]="updateUserDynamicFormModel"
+                                [isUpdate]="true"
+                                [patchValue]="user"
+                                (formSubmit)="onUserUpdateFormSubmit($event)">
+      </app-dynamic-form-builder>
+
+      <ng-template *ngIf="!isEdit">
+        <ng-container *ngTemplateOutlet="viewUser"></ng-container>
+      </ng-template>
+
+    </div>
+  </div>
+
+</div>
+
+<ng-template #viewUser>
+  <span>View User</span>
+</ng-template>
+
+<ng-template #messageBlock>
+  <div *ngIf="!!responseMessage">
+
+    <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+      {{ responseMessage }}<a *ngIf="user" class="ml-2 btn btn-info btn-sm"
+                              [routerLink]="API_ROUTES.USER_DETAILS + '/' + user.id">
+      <span>View</span>
+    </a>
+    </ngb-alert>
+  </div>
+</ng-template>
+
+

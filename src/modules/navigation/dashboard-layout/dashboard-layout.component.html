@@ -1,0 +1,16 @@
+<p>main-dash works!</p>
+<span [ngClass]='{"sb-nav-fixed": !static}'>
+    <app-user-top-nav></app-user-top-nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <app-sidebar [sidenavStyle]="sidenavStyle" [sideNavItems]="sideNavItems" [sideNavGroups]="sideNavGroups"></app-sidebar>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <ng-content></ng-content>
+                </div>
+            </main>
+            <!-- <app-footer></app-footer> -->
+        </div></div>
+</span>

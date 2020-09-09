@@ -1,0 +1,29 @@
+
+<div class="col-sm-12">
+
+  <div class="card">
+    <div class="card-header">Add New Task</div>
+    <div class="card-body">
+
+      <ng-container *ngTemplateOutlet="messageBlock"></ng-container>
+      <app-dynamic-form-builder [dynamicFormModel]="taskDynamicFormModel"
+                                [resetForm]="isFormReset"
+                                (formSubmit)="onTaskFormSubmit($event)">
+      </app-dynamic-form-builder>
+
+    </div>
+  </div>
+
+</div>
+
+<ng-template #messageBlock>
+  <div *ngIf="!!responseMessage">
+
+    <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+      {{ responseMessage }}
+      <a *ngIf="createdTask" class="ml-2 btn btn-info btn-sm" [routerLink]="API_ROUTES.TASK_DETAILS + '/' + createdTask.id">
+      <span>View Task</span>
+    </a>
+    </ngb-alert>
+  </div>
+</ng-template>

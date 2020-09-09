@@ -1,0 +1,34 @@
+<div [formGroup]="form" class="input-group">
+
+  <ng-template [ngIf]="field.isSubForm" [ngIfElse]="textInput">
+    <ng-container [formGroupName]="field.name">
+      <ng-container *ngTemplateOutlet="textInput"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #textInput>
+    <input *ngIf="!inputText.multiline"
+           class="form-control"
+           [attr.type]="field.type"
+           [ngClass]="isTouched ? isValid ? 'is-valid' : 'is-invalid' : ''"
+           [id]="field.name"
+           [name]="field.name"
+           [placeholder]="inputText.placeholder"
+           [formControlName]="field.name"/>
+    <textarea *ngIf="inputText.multiline"
+              class="form-control"
+              [ngClass]="isTouched ? isValid ? 'is-valid' : 'is-invalid' : ''"
+              [formControlName]="field.name"
+              [id]="field.name"
+              [rows]="inputText.rowNum > 0 ? inputText.rowNum : 2"
+              [placeholder]="inputText.placeholder">
+  </textarea>
+  </ng-template>
+
+  <div *ngIf="!field.disableValidation && isTouched && !isValid" class="invalid-feedback">
+    <div *ngIf="form.controls[field.name].errors.required">
+      {{field.fieldValidators.requiredMsg ? field.fieldValidators.requiredMsg : field.label + ' is required' }}
+    </div>
+  </div>
+
+</div>

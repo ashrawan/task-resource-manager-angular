@@ -1,0 +1,16 @@
+<div [formGroup]="form">
+  <div [formGroupName]="field.name">
+    <div *ngFor="let item of inputCheckbox.items" class="form-check form-check">
+      <label class="form-check-label">
+        <input [formControlName]="item[inputCheckbox.bindValue]"
+               [ngClass]="isTouched ? isValid ? 'is-valid' : 'is-invalid' : ''"
+               type="checkbox"
+               id="inlineCheckbox1"
+               value="{{inputCheckbox.value}}"/>
+        {{inputCheckbox[inputCheckbox.bindLabel]}}
+      </label>
+
+    </div>
+  </div>
+
+</div>

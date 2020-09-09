@@ -1,0 +1,74 @@
+<!--<div [formGroup]="form">-->
+<!--  <label [htmlFor]="field.name">File</label>-->
+<!--  <input-->
+<!--    [name]="field.name"-->
+<!--    [id]="field.name"-->
+<!--    type="file"-->
+<!--    class="form-control"-->
+<!--    (change)="onFileChange($event)">-->
+<!--</div>-->
+
+
+<div [formGroup]="form">
+
+  <div class="row">
+
+    <div class="col-8">
+
+      <div class="col-12">
+        <div *ngIf="!!responseMessage">
+          <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+            {{ responseMessage }}
+          </ngb-alert>
+        </div>
+      </div>
+
+      <div class="drop-container dropzone" (click)="fileInput.click()" appDragDropFile
+           (onFileDropped)="onFileChange($event)">
+        <p class="m-0">
+          Drag a file here or
+          <label class="upload-button">
+            <input type="file" #fileInput multiple="" (change)="onFileChange($event)"> browse
+          </label>
+          to upload.
+        </p>
+
+      </div>
+
+      <!--  Selected Files      -->
+      <div class="mt-4 row">
+        <div class="col-10"><b>Selected Files: </b> <span class="text-danger" *ngIf="!!fileSelectionResponseMsg">{{ fileSelectionResponseMsg }}</span> </div>
+
+        <div *ngIf="resourceInfos.length > 0" class="col-2 btn-link cursor-pointer">
+
+          Clear All &nbsp;
+          <fa-icon (click)="clearAllSelectedFiles()" [icon]='["fas", "trash"]'></fa-icon>
+        </div>
+        <ng-container *ngFor="let resource of resourceInfos; let i= index">
+          <div class="col-6 mb-2">
+            <div class="row ml-1">
+              <span
+                class="col-10 d-flex justify-content-between align-items-center selec-file-label">{{ resource.resourceName }}</span>
+              <span class="col-2 cursor-pointer selec-file-delete-badge" (click)="deleteResource(i)">
+              <fa-icon [icon]='["fas", "trash"]'></fa-icon>
+            </span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
+
+    <!--  Load Resource List to Select already Uploaded Files      -->
+    <div class="col-4">
+      <app-table [gridTitle]="'My Resources'"
+                 [pageSize]="5"
+                 [triggerRefresh]="triggerRefresh"
+                 [dataGridConfigurer]="myTaskDataGridConfigurer"
+                 (rowSelected)="onGridResourceSelection($event)">
+      </app-table>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,27 @@
+<div class="col-sm-12">
+
+  <div class="card">
+    <div class="card-header">Add New User</div>
+    <div class="card-body">
+
+      <ng-container *ngTemplateOutlet="messageBlock"></ng-container>
+      <app-dynamic-form-builder [dynamicFormModel]="userDynamicFormModel"
+                                [resetForm]="isFormReset"
+                                (formSubmit)="onUserFormSubmit($event)">
+      </app-dynamic-form-builder>
+
+    </div>
+  </div>
+
+</div>
+
+<ng-template #messageBlock>
+  <div *ngIf="!!responseMessage">
+
+    <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+      {{ responseMessage }}<a *ngIf="createdUser" class="ml-2 btn btn-info btn-sm" [routerLink]="USER_API_ROUTES.USER_DETAILS + '/' + createdUser.id">
+        <span>View User</span>
+      </a>
+    </ngb-alert>
+  </div>
+</ng-template>

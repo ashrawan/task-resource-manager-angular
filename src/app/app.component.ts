@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {ChildActivationEnd, Router} from '@angular/router';
+import {filter} from 'rxjs/operators';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'lk-taskmanager-UI';
+  title = 'LK-taskmanager-UI';
+
+  constructor(public router: Router, private titleService: Title) {
+    this.router.events
+      .pipe(filter(event => event instanceof ChildActivationEnd))
+      .subscribe(event => {
+        let snapshot = (event as ChildActivationEnd).snapshot;
+        while (snapshot.firstChild !== null) {
+          snapshot = snapshot.firstChild;
+        }
+        this.titleService.setTitle(snapshot.data.title || 'LK Task Manager');
+      });
+  }
 }

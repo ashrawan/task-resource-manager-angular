@@ -1,0 +1,31 @@
+<div class="row">
+
+  <div class="col-4">
+    <app-my-task-board-list (taskSelected)="onTaskSet($event)"></app-my-task-board-list>
+  </div>
+
+  <div class="col-8">
+
+    <app-card>
+      <div class="card-header">
+        <fa-icon class="mr-1" [icon]='["fas", "table"]'></fa-icon>
+        Selected Task
+      </div>
+      <div class="card-body">
+        <app-my-task-view *ngIf="selectedTask" [task]="selectedTask"></app-my-task-view>
+      </div>
+    </app-card>
+  </div>
+
+</div>
+
+
+<div *ngIf="isAssignedToMe && selectedTask" class="row">
+
+  <div class="col-12">
+    <div class="card-body">
+      <app-my-task-submission [task]="selectedTask"></app-my-task-submission>
+    </div>
+  </div>
+
+</div>

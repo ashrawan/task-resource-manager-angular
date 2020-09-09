@@ -1,0 +1,11 @@
+<div [formGroup]="form">
+  <div class="form-check" *ngFor="let item of inputRadio.items">
+    <input [ngClass]="isTouched ? isValid ? 'is-valid' : 'is-invalid' : ''"
+           class="form-check-input"
+           type="radio"
+           [value]="item[inputRadio.bindValue]">
+    <label class="form-check-label">
+      {{item[inputRadio.bindLabel]}}
+    </label>
+  </div>
+</div>
