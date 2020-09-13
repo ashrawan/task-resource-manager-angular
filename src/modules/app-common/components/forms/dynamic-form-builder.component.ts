@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {AbstractControlOptions, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {
   DynamicFormModel,
@@ -12,6 +12,7 @@ import {
   InputSelect,
   InputText
 } from '../inputs/input.model';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-dynamic-form-builder',
@@ -56,7 +57,7 @@ export class DynamicFormBuilderComponent implements OnInit, OnChanges {
     if (this.resetForm) {
       this.currentForm.reset();
     }
-    // this.patchFormValue();
+    this.patchFormValue();
   }
 
   onFormSubmission(): void {
@@ -68,7 +69,8 @@ export class DynamicFormBuilderComponent implements OnInit, OnChanges {
   patchFormValue(): void {
     if (this.patchValue) {
       Object.entries(this.patchValue).map(([key, value]) => {
-        if (this.currentForm.contains(key)) {
+        if (this.currentForm && this.currentForm.contains(key)) {
+          console.log('patching all values');
           if (typeof value !== 'object' || typeof value !== 'function') {
             this.currentForm.controls[key].patchValue(value);
           }

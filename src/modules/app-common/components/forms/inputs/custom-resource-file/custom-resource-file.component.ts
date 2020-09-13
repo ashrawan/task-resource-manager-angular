@@ -36,11 +36,11 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.initResourcesFromFormPatch();
+    console.log('custom file on changes');
   }
 
   ngOnInit(): void {
-    return;
+    this.initResourcesFromFormPatch();
   }
 
   ngOnDestroy(): void {
@@ -49,13 +49,10 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
 
   initResourcesFromFormPatch(): void {
     const formFilesValue = this.form.controls[this.field.name].value;
-    console.log('form files resources ', this.form);
-    this.form.valueChanges.subscribe(selectedValue => {
-      console.log('form value changed');
-      console.log(selectedValue);
-      if (formFilesValue != null) {
-        this.resourceInfos = formFilesValue;
-      }
+    this.resourceInfos = formFilesValue;
+    this.form.controls[this.field.name].valueChanges.subscribe(selectedValue => {
+      console.log('custom file form value changed', selectedValue);
+      this.resourceInfos = selectedValue;
     });
   }
 
@@ -90,7 +87,8 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
     this.fileSelectionResponseMsg = null;
     if (opDataEmit.optionName === 'select') {
       let isFileAlreadySelected = false;
-      this.resourceInfos.some(value => {
+      const checkFilteredRes: ResourceInfo[] = [...this.resourceInfos];
+      checkFilteredRes.some(value => {
         if (value.id === opDataEmit.data.id) {
           isFileAlreadySelected = true;
           return true;
@@ -98,8 +96,8 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
         return false;
       });
       if (!isFileAlreadySelected) {
-        this.resourceInfos = [...this.resourceInfos, opDataEmit.data];
-        this.form.controls[this.field.name].patchValue(this.resourceInfos);
+        const newResData = [...checkFilteredRes, opDataEmit.data];
+        this.form.controls[this.field.name].patchValue(newResData);
       } else {
         this.fileSelectionResponseMsg = 'This File is already Selected';
         setTimeout(() => this.fileSelectionResponseMsg = null, 3000);
@@ -111,16 +109,17 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
 
   deleteResource(index: number): void {
     this.resourceInfos.splice(index, 1);
+    // console.log('spliced data ', splicedData);
+    this.form.controls[this.field.name].patchValue(this.resourceInfos);
     this.fileSelectionResponseMsg = null;
   }
 
   clearAllSelectedFiles(): void {
-    this.resourceInfos = [];
+    this.form.controls[this.field.name].patchValue([]);
     this.fileSelectionResponseMsg = null;
   }
 
   onFileChange(event): void {
-    console.log('file changed triggered');
     this.fileSelectionResponseMsg = null;
     if (event.target.files.length > 0) {
       const singleFile = event.target.files[0];

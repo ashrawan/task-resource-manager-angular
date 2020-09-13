@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Task} from '../../app-common/services/model';
-import {AuthService} from '../../app-common/services/apis/auth.service';
+import {TaskService} from '../../app-common/services/apis/task.service';
 
 @Component({
   selector: 'app-personal-task-board',
@@ -11,7 +11,7 @@ export class PersonalTaskBoardComponent implements OnInit {
 
   selectedTask: Task = null;
 
-  constructor() {
+  constructor(private taskService: TaskService) {
   }
 
   ngOnInit(): void {
@@ -19,7 +19,11 @@ export class PersonalTaskBoardComponent implements OnInit {
 
   onTaskSet(task: Task): void {
     console.log('main component got data ', task);
-    this.selectedTask = task;
+    this.taskService.getTaskById(task.id).subscribe(value => {
+      this.selectedTask = value.response;
+    }, error => {
+      this.selectedTask = null;
+    });
   }
 
 }
