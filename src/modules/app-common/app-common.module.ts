@@ -27,6 +27,7 @@ import {FileUploadModalComponent} from './components/forms/inputs/custom-file-up
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {CustomResourceFileComponent} from './components/forms/inputs/custom-resource-file/custom-resource-file.component';
 import { DragDropFileDirective } from './components/forms/inputs/custom-resource-file/drag-drop/drag-drop-file.directive';
+import {ErrorModule} from './error/error.module';
 
 
 const components = [
@@ -59,6 +60,7 @@ const components = [
     CommonModule,
     RouterModule,
     NgSelectModule,
+    ErrorModule,
     NgOptionHighlightModule,
     FormsModule,
     ReactiveFormsModule,

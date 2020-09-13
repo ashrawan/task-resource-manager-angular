@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     RouterModule
-  ]
+  ],
 })
-export class ErrorModule { }
+export class ErrorModule {
+}

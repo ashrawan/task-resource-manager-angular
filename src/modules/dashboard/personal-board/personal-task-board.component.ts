@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Task, User} from '../../app-common/services/model';
+import {Task} from '../../app-common/services/model';
 import {AuthService} from '../../app-common/services/apis/auth.service';
 
 @Component({
@@ -9,10 +9,10 @@ import {AuthService} from '../../app-common/services/apis/auth.service';
 })
 export class PersonalTaskBoardComponent implements OnInit {
 
-  selectedTask: Task;
-  isAssignedToMe: boolean;
+  selectedTask: Task = null;
 
-  constructor(private authService: AuthService) { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
@@ -20,15 +20,6 @@ export class PersonalTaskBoardComponent implements OnInit {
   onTaskSet(task: Task): void {
     console.log('main component got data ', task);
     this.selectedTask = task;
-    this.initIsAssignedToMe(task);
   }
 
-  initIsAssignedToMe(task: Task): void {
-    const currentUser: User = this.authService.getCurrentUser();
-    if(task.assignedTo.id === currentUser.id) {
-      this.isAssignedToMe = true;
-    } else {
-      this.isAssignedToMe = false;
-    }
-  }
 }

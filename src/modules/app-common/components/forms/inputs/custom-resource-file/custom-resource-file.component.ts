@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormFieldModel, InputCustomResources} from '../../../inputs/input.model';
 import {FormGroup} from '@angular/forms';
 import {ResourceService} from '../../../../services/apis/resource.service';
@@ -13,7 +13,7 @@ import {Subject} from 'rxjs';
   templateUrl: './custom-resource-file.component.html',
   styleUrls: ['./custom-resource-file.component.scss']
 })
-export class CustomResourceFileComponent implements OnInit, OnDestroy {
+export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() field: FormFieldModel;
   @Input() form: FormGroup;
@@ -35,12 +35,28 @@ export class CustomResourceFileComponent implements OnInit, OnDestroy {
     this.myTaskDataGridConfigurer = customResourceFileConfigurerService;
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initResourcesFromFormPatch();
+  }
+
   ngOnInit(): void {
-    console.log('custom resource file ngoninit');
+    return;
   }
 
   ngOnDestroy(): void {
     this.triggerRefresh.unsubscribe();
+  }
+
+  initResourcesFromFormPatch(): void {
+    const formFilesValue = this.form.controls[this.field.name].value;
+    console.log('form files resources ', this.form);
+    this.form.valueChanges.subscribe(selectedValue => {
+      console.log('form value changed');
+      console.log(selectedValue);
+      if (formFilesValue != null) {
+        this.resourceInfos = formFilesValue;
+      }
+    });
   }
 
   toggleHover($event): void {
@@ -50,6 +66,7 @@ export class CustomResourceFileComponent implements OnInit, OnDestroy {
   closeAlert(): void {
     return;
   }
+
   closeAlertTwo(): void {
     return;
   }
