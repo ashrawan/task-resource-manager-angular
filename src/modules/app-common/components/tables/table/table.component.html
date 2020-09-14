@@ -10,62 +10,70 @@
                [(ngModel)]="searchTerm" (ngModelChange)="onSearchInput($event)"/>
 
       </div>
-      <table class="table table-striped table-hover table-responsive">
-        <thead>
-        <tr>
-          <ng-container *ngFor="let column of columns">
-            <th *ngIf="!column.hide" scope="col" sortColumn="{{column.name}}" (sort)="onSort($event)">
-              <span>{{column.label}}</span>
-              <sb-sort-icon *ngIf='sortColumn === column.name' [direction]="sortDirection"></sb-sort-icon>
-            </th>
-          </ng-container>
-          <th *ngIf="rowOptions">Options</th>
-        </tr>
-        </thead>
-        <tbody *ngIf="gridData">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+          <tr>
+            <ng-container *ngFor="let column of columns">
+              <th *ngIf="!column.hide" scope="col" sortColumn="{{column.name}}" (sort)="onSort($event)">
+                <span>{{column.label}}</span>
+                <sb-sort-icon *ngIf='sortColumn === column.name' [direction]="sortDirection"></sb-sort-icon>
+              </th>
+            </ng-container>
+            <th *ngIf="rowOptions">Options</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="gridData">
 
-        <tr *ngFor="let data of gridData; let i = index">
-          <ng-container *ngFor="let column of columns; let i = index">
-            <ng-container *ngIf="!column.hide">
+          <tr *ngFor="let data of gridData; let i = index">
+            <ng-container *ngFor="let column of columns; let i = index">
+              <ng-container *ngIf="!column.hide">
 
-            <ng-template [ngIf]="column.type === 'object'" [ngIfElse]="normalTableData">
-              <ng-container [ngSwitch]="column.objectBind.type">
+                <ng-template [ngIf]="column.type === 'object'" [ngIfElse]="normalTableData">
+                  <ng-container [ngSwitch]="column.objectBind.type">
 
-                <ng-container *ngSwitchCase="'string'"><td>{{data[column.name][column.objectBind.nameBind]}}</td></ng-container>
-                <ng-container *ngSwitchCase="'fixedLink'">
-                  <td><a class="link"
-                       [routerLink]="column.objectBind.fixedLinkValue + '/' + data[column.name][column.objectBind.apiFixedLinkBind]">
-                      {{data[column.name][column.objectBind.nameBind]}}</a>
-                  </td>
-                </ng-container>
+                    <ng-container *ngSwitchCase="'string'">
+                      <td>{{data[column.name][column.objectBind.nameBind]}}</td>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'fixedLink'">
+                      <td><a class="link"
+                             [routerLink]="column.objectBind.fixedLinkValue + '/' + data[column.name][column.objectBind.apiFixedLinkBind]">
+                        {{data[column.name][column.objectBind.nameBind]}}</a>
+                      </td>
+                    </ng-container>
+
+                  </ng-container>
+                </ng-template>
+
+                <ng-template #normalTableData>
+                  <td>{{data[column.name] ? data[column.name] : '-'}}</td>
+                </ng-template>
 
               </ng-container>
-            </ng-template>
-
-            <ng-template #normalTableData>
-              <td>{{data[column.name] ? data[column.name] : '-'}}</td>
-            </ng-template>
-
             </ng-container>
-          </ng-container>
-          <ng-container *ngFor="let rowOption of rowOptions; let i = index">
-            <td>
-              <a *ngIf="rowOption.type === 'link'" class="btn btn-sm" [ngClass]="rowOption.class"
-                 [routerLink]="rowOption.link + '/' + data[rowOption.appendCname]">{{rowOption.label}}</a>
-            </td>
-            <td>
-              <button *ngIf="rowOption.type === 'emit'" class="btn btn-sm" [ngClass]="rowOption.class" (click)="onOptionClicked(data, rowOption)">
-                <ng-template [ngIf]="rowOption.icon.length > 0" [ngIfElse]="btnLabel"><fa-icon [icon]='["fas", rowOption.icon]'></fa-icon> </ng-template>
-                <ng-template #btnLabel>{{rowOption.label}}</ng-template>
-              </button>
-            </td>
-          </ng-container>
-        </tr>
+            <ng-container *ngFor="let rowOption of rowOptions; let i = index">
+              <td>
+                <a *ngIf="rowOption.type === 'link'" class="btn btn-sm" [ngClass]="rowOption.class"
+                   [routerLink]="rowOption.link + '/' + data[rowOption.appendCname]">{{rowOption.label}}</a>
+              </td>
+              <td>
+                <button *ngIf="rowOption.type === 'emit'" class="btn btn-sm" [ngClass]="rowOption.class"
+                        (click)="onOptionClicked(data, rowOption)">
+                  <ng-template [ngIf]="rowOption.icon.length > 0" [ngIfElse]="btnLabel">
+                    <fa-icon [icon]='["fas", rowOption.icon]'></fa-icon>
+                  </ng-template>
+                  <ng-template #btnLabel>{{rowOption.label}}</ng-template>
+                </button>
+              </td>
+            </ng-container>
+          </tr>
 
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
       <div *ngIf="totalElements > 0" class="d-flex justify-content-between p-2">
-        <ngb-pagination [collectionSize]="totalElements" [(page)]="currentPage" [pageSize]="pageSize" (pageChange)="onPageChange()"></ngb-pagination>
+        <ngb-pagination [collectionSize]="totalElements" [(page)]="currentPage" [pageSize]="pageSize"
+                        (pageChange)="onPageChange()"></ngb-pagination>
         <!--        <select class="custom-select" style="width: auto;" name="pageSize" [(ngModel)]="pageSize">-->
         <!--          <option [ngValue]="10">10 items per page</option>-->
         <!--          <option [ngValue]="20">20 items per page</option>-->
