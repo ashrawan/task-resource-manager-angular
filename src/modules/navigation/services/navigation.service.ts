@@ -26,6 +26,10 @@ export class NavigationService {
       });
   }
 
+  currentSideNavState(): boolean {
+    return !this.sideNavVisible$.value;
+  }
+
   isSideNavVisible(): Observable<boolean> {
     return this.sideNavVisible$;
   }
