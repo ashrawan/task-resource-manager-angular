@@ -5,36 +5,52 @@
     <div class="col-8">
 
       <div class="col-12">
-        <div *ngIf="!!responseMessage">
-          <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
-            {{ responseMessage }}
-          </ngb-alert>
+        <div class="d-flex w-100 justify-content-start">
+          <div *ngIf="!!responseMessage">
+            <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+              {{ responseMessage }}
+            </ngb-alert>
+          </div>
+          <div class="flex-grow-1"></div>
+          <div class="ml-1 btn"
+               [ngClass]="currentView === TABS.ALL ? 'btn-info' : 'btn-outline-info'" (click)="currentView = TABS.ALL">
+            ALL
+          </div>
+          <div class="ml-1 btn"
+               [ngClass]="currentView === TABS.AUDIO ? 'btn-info' : 'btn-outline-info'"
+               (click)="currentView = TABS.AUDIO">AUDIO
+          </div>
         </div>
       </div>
 
-      <div class="drop-container dropzone" (click)="fileInput.click()" appDragDropFile
-           (onFileDropped)="onFileChange($event)">
-        <p class="m-0">
-          Drag a file here or
-          <label class="upload-button">
-            <input type="file" #fileInput multiple="" (change)="onFileChange($event)"> browse
-          </label>
-          to upload.
-        </p>
+      <ng-container *ngIf="currentView === TABS.ALL">
+        <div class="drop-container dropzone" (click)="fileInput.click()" appDragDropFile
+             (onFileDropped)="onFileChange($event)">
+          <p class="m-0">
+            Drag a file here or
+            <label class="upload-button">
+              <input type="file" #fileInput multiple="" (change)="onFileChange($event)"> browse
+            </label>
+            to upload.
+          </p>
+        </div>
+      </ng-container>
 
-      </div>
+      <ng-container *ngIf="currentView === TABS.AUDIO">
+        <app-my-task-audio-submission [fileInitialName]="'audio'"
+                                      (audioOnUpload)="onAudioUpload($event)" [resetAudio]="isUploaded"></app-my-task-audio-submission>
+      </ng-container>
 
       <!--  Selected Files      -->
       <div class="mt-4 row">
-        <div class="col-10"><b>Selected Files: </b> <span class="text-danger"
-                                                          *ngIf="!!fileSelectionResponseMsg">{{ fileSelectionResponseMsg }}</span>
+        <div class="col-10"><b>Selected Files: </b>
+          <span class="text-danger" *ngIf="!!fileSelectionResponseMsg">{{ fileSelectionResponseMsg }}</span>
         </div>
 
         <ng-container *ngIf="resourceInfos && resourceInfos.length > 0">
-          <div class="col-2 btn-link cursor-pointer">
-
+          <div class="col-2 btn-link cursor-pointer" (click)="clearAllSelectedFiles()">
             Clear All &nbsp;
-            <fa-icon (click)="clearAllSelectedFiles()" [icon]='["fas", "trash"]'></fa-icon>
+            <fa-icon [icon]='["fas", "trash"]'></fa-icon>
           </div>
           <ng-container *ngFor="let resource of resourceInfos; let i= index">
             <div class="col-6 mb-2">

@@ -95,3 +95,8 @@ export interface InputCustomResources {
   resources: [];
   placeholder: string;
 }
+
+export interface CustomFormConfig {
+  disableAll?: boolean;
+  disableAudio?: boolean;
+}

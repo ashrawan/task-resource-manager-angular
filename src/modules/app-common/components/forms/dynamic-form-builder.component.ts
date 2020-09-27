@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {AbstractControlOptions, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {
+  CustomFormConfig,
   DynamicFormModel,
   FieldValidate,
   FormFieldModel,
@@ -12,7 +13,6 @@ import {
   InputSelect,
   InputText
 } from '../inputs/input.model';
-import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-dynamic-form-builder',
@@ -28,6 +28,7 @@ export class DynamicFormBuilderComponent implements OnInit, OnChanges {
   @Input() isUpdate = false;
   @Input() patchValue: object = {};
   @Input() resetForm = false;
+  @Input() customFormConfig: CustomFormConfig;
 
   // <app-dynamic-form> - Inputs on Self selection
   @Input() isChildForm = false;
@@ -56,8 +57,11 @@ export class DynamicFormBuilderComponent implements OnInit, OnChanges {
     console.log('ng on changes dynamic form, isChildForm', this.isChildForm);
     if (this.resetForm) {
       this.currentForm.reset();
+      this.processDynamicForm(this.dynamicFormModel);
+      this.isFormInitialized = true;
+    } else {
+      this.patchFormValue();
     }
-    this.patchFormValue();
   }
 
   onFormSubmission(): void {

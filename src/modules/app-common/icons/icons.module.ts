@@ -18,7 +18,7 @@ import {
   faTachometerAlt,
   faUser,
   faTrash,
-  faDownload
+  faDownload,
 } from '@fortawesome/free-solid-svg-icons';
 
 const fontAwesomeSolidIcons = {
@@ -38,7 +38,7 @@ const fontAwesomeSolidIcons = {
   faTachometerAlt,
   faUser,
   faTrash,
-  faDownload
+  faDownload,
 };
 
 @NgModule({

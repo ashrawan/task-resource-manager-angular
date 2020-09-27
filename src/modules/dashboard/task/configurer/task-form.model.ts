@@ -130,6 +130,45 @@ export const TaskDynamicFormModel: DynamicFormModel[] = [
     formFields: [
       {
         type: 'select',
+        name: 'submissionStatus',
+        label: 'Submission Status',
+        input: {
+          items: null,
+          value: null,
+          bindLabel: 'key',
+          bindValue: 'value',
+          placeholder: 'Select Task Submission Status',
+          itemsLoader: 'Select_Task_Submission_Status'
+        } as InputSelect,
+        fieldValidators: {
+          required: true,
+        } as FieldValidate,
+        className: '',
+      },
+    ]
+  },
+  {
+    className: '',
+    formFields: [
+      {
+        type: 'select',
+        name: 'taskType',
+        label: 'Task Type',
+        input: {
+          items: null,
+          value: null,
+          bindLabel: 'key',
+          bindValue: 'value',
+          placeholder: 'Select Task Type',
+          itemsLoader: 'Select_Task_Type'
+        } as InputSelect,
+        fieldValidators: {
+          required: true,
+        } as FieldValidate,
+        className: '',
+      },
+      {
+        type: 'select',
         name: 'status',
         label: 'Status',
         input: {
@@ -138,7 +177,7 @@ export const TaskDynamicFormModel: DynamicFormModel[] = [
           bindLabel: 'key',
           bindValue: 'value',
           placeholder: 'Select Status',
-          itemsLoader: 'Select_User_Status'
+          itemsLoader: 'Select_Task_Status'
         } as InputSelect,
         fieldValidators: {
           required: true,

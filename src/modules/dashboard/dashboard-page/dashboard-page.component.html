@@ -1,1 +1,26 @@
-<p>dashboard-page works!</p>
+<app-card>
+  <div class="card-header">
+    <div class="d-flex">
+      <span><fa-icon class="mr-1" [icon]='["fas", "table"]'></fa-icon>My Task</span>
+
+      <span class="flex-grow-1"></span>
+      <div class="form-group">
+        <select
+          name="submissionStatus"
+          class="form-control"
+          [(ngModel)]="selectedSubStatus" (ngModelChange)="onSelectChange()">
+          <option value=''>Select Submission Status</option>
+          <option *ngFor="let subStatus of submissionStatus" [value]="subStatus.value">{{ subStatus.key }}</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+  <div class="card-body">
+    <app-table [gridTitle]="'TASKS'"
+               [disableCardWrapper]="true"
+               [triggerRefresh]="triggerTaskRefresh"
+               [dataGridConfigurer]="dashTaskDataGridConfigurer">
+    </app-table>
+  </div>
+</app-card>

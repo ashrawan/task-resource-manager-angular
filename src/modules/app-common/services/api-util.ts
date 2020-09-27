@@ -7,7 +7,6 @@ export class ApiUtil {
     return  new HttpParams()
       .set('page', (pageRequest.page - 1).toString())
       .set('size', pageRequest.size.toString())
-      .set('sort', pageRequest.sort.toString())
-      .set('direction', pageRequest.direction.toString());
+      .set('sort', pageRequest.sort.toString() + ',' + pageRequest.direction.toString());
   }
 }

@@ -1,34 +1,42 @@
 import {Injectable} from '@angular/core';
 import {AbstractDataConfigurer} from '../../../app-common/generic-services/abstract-data-configurer';
 import {GenericFilterRequest, GenericResponse, PageRequest, Task, User} from '../../../app-common/services/model';
-import {CoreConstant} from '../../../app-common/core-constant';
-import {Column, GridRowOption} from '../../../app-common/components/tables/table-model';
-import {TaskService} from '../../../app-common/services/apis/task.service';
 import {Observable} from 'rxjs';
+import {Column, GridRowOption} from '../../../app-common/components/tables/table-model';
+import {CoreConstant} from '../../../app-common/core-constant';
+import {TaskService} from '../../../app-common/services/apis/task.service';
 import {AuthService} from '../../../app-common/services/apis/auth.service';
-import {InputSelectOption} from '../../../app-common/components/inputs/input.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MyTaskBoardConfigurerService extends AbstractDataConfigurer<Task> {
+export class DashTaskConfigurerService extends AbstractDataConfigurer<Task> {
 
   API_ROUTES = CoreConstant.APP_ROUTES;
-  selectTaskByList: InputSelectOption[] = [
-    {key: 'Assigned To Me', value: 'ASSIGNED'},
-    {key: 'Reported By Me', value: 'REPORTING'}
-  ];
-  setTaskBy = 'ASSIGNED';
+  submissionStatus: string;
 
   myTaskColumns: Column[] = [
     {name: 'id', label: 'Task Id', filterable: false, sortable: false, type: 'string', hide: true},
     {name: 'title', label: 'Title', filterable: true, sortable: true, type: 'string', defaultSearch: true},
-    {name: 'submissionStatus', label: 'status', filterable: true, sortable: true, type: 'string'},
+    {name: 'submissionStatus', label: 'Submission Status', filterable: true, sortable: true, type: 'string'},
+    {name: 'taskType', label: 'Task Type', filterable: true, sortable: true, type: 'string'},
+    {
+      name: 'assignedTo', label: 'Assigned To', filterable: true, sortable: true, type: 'object',
+      objectBind: {
+        nameBind: 'fullName', type: 'fixedLink', linkType: 'internal',
+        fixedLinkValue: this.API_ROUTES.USER_DETAILS, apiFixedLinkBind: 'id'
+      }
+    },
+    {
+      name: 'reportTo', label: 'Report To', filterable: true, sortable: true, type: 'object',
+      objectBind: {
+        nameBind: 'fullName', type: 'fixedLink', linkType: 'internal',
+        fixedLinkValue: this.API_ROUTES.USER_DETAILS, apiFixedLinkBind: 'id'
+      }
+    }
   ];
 
-  myTaskRowOptions: GridRowOption[] = [
-    {name: 'select', label: 'Select', icon: '', class: 'btn-info', type: 'emit', link: '', appendCname: 'id'},
-  ];
+  myTaskRowOptions: GridRowOption[] = [];
 
   constructor(private taskService: TaskService, private authService: AuthService) {
     super();
@@ -49,12 +57,11 @@ export class MyTaskBoardConfigurerService extends AbstractDataConfigurer<Task> {
   filterGridData(pageRequest: PageRequest, genericFilterRequest: GenericFilterRequest<Task>): Observable<GenericResponse<Task[]>> {
     const currentUser: User = this.authService.getCurrentUser();
     const parsePageRequest: PageRequest = {...pageRequest};
-    console.log('set task by', this.setTaskBy);
     const parseDataFilterRequest = {
       dataFilter: {
         ...genericFilterRequest.dataFilter,
-        ...(this.setTaskBy === 'ASSIGNED' && {assignedTo: currentUser}),
-        ...(this.setTaskBy === 'REPORTING' && {reportTo: currentUser}),
+        assignedTo: currentUser,
+        ...(this.submissionStatus && {submissionStatus: this.submissionStatus}),
       }
     } as GenericFilterRequest<Task>;
     return this.taskService.filterTasks(parsePageRequest, parseDataFilterRequest);

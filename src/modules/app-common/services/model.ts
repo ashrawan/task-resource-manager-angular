@@ -49,6 +49,8 @@ export interface Task {
   startDate?: Date;
   endDate?: Date;
   taskResources: ResourceInfo[];
+  taskType: TASK_TYPE;
+  submissionStatus: string;
   status: string;
 }
 
@@ -60,4 +62,8 @@ export interface ResourceInfo {
   resourceOwner?: User;
   createdAt?: Date;
   status: string;
+}
+
+export enum TASK_TYPE {
+  ALL= 'ALL', AUDIO= 'AUDIO'
 }

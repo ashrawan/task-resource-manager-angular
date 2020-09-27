@@ -22,12 +22,11 @@ import {DynamicFormBuilderComponent} from './components/forms/dynamic-form-build
 import {NgSelectModule} from '@ng-select/ng-select';
 import {NgOptionHighlightModule} from '@ng-select/ng-option-highlight';
 import {DateComponent} from './components/forms/inputs/date/date.component';
-import {CustomFileUploadComponent} from './components/forms/inputs/custom-file-upload/custom-file-upload.component';
-import {FileUploadModalComponent} from './components/forms/inputs/custom-file-upload/file-upload-modal/file-upload-modal.component';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {CustomResourceFileComponent} from './components/forms/inputs/custom-resource-file/custom-resource-file.component';
-import { DragDropFileDirective } from './components/forms/inputs/custom-resource-file/drag-drop/drag-drop-file.directive';
+import {DragDropFileDirective} from './components/forms/inputs/custom-resource-file/drag-drop/drag-drop-file.directive';
 import {ErrorModule} from './error/error.module';
+import {MyTaskAudioSubmissionComponent} from './components/forms/inputs/custom-resource-file/my-task-audio-submission/my-task-audio-submission.component';
 
 
 const components = [
@@ -51,9 +50,8 @@ const components = [
   declarations: [
     ...components,
     DateComponent,
-    CustomFileUploadComponent,
-    FileUploadModalComponent,
     CustomResourceFileComponent,
+    MyTaskAudioSubmissionComponent,
     DragDropFileDirective,
   ],
   imports: [
@@ -81,7 +79,6 @@ const components = [
     IconsModule,
     NgSelectModule,
     ...components,
-    CustomFileUploadComponent,
     CustomResourceFileComponent,
   ]
 })

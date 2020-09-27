@@ -21,23 +21,24 @@ export class MyTaskViewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  downloadResource(resourceInfo: ResourceInfo): void {
+  downloadResource(resourceInfo: ResourceInfo, openInTab: boolean = false): void {
     this.resourceService.download(resourceInfo.id).subscribe(response => {
       console.log('file from server ', response);
       const dataType = response.type;
       const binaryData = [];
       binaryData.push(response);
-
-      const fileURL = URL.createObjectURL(new Blob(binaryData, {type: dataType}));
-      window.open(fileURL, '_blank');
-
-      // const downloadLink = document.createElement('a');
-      // downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
-      // if (resourceInfo.resourceName) {
-      //   downloadLink.setAttribute('download', resourceInfo.resourceName);
-      // }
-      // document.body.appendChild(downloadLink);
-      // downloadLink.click();
+      if (openInTab) {
+        const fileURL = URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+        window.open(fileURL, '_blank');
+      } else {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+        if (resourceInfo.resourceName) {
+          downloadLink.setAttribute('download', resourceInfo.resourceName);
+        }
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      }
     });
 
   }

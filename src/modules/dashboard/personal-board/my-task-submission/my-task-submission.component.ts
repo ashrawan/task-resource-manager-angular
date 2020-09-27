@@ -1,13 +1,12 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {CoreConstant} from '../../../app-common/core-constant';
-import {DynamicFormModel} from '../../../app-common/components/inputs/input.model';
-import {Task, User} from '../../../app-common/services/model';
+import {CustomFormConfig, DynamicFormModel} from '../../../app-common/components/inputs/input.model';
+import {Task, TASK_TYPE, User} from '../../../app-common/services/model';
 import {ActivatedRoute} from '@angular/router';
 import {TaskService} from '../../../app-common/services/apis/task.service';
 import {FormGroup} from '@angular/forms';
 import {myTaskSubmissionDynamicFormModel} from '../configurer/my-task-submission-form.mode';
 import {AuthService} from '../../../app-common/services/apis/auth.service';
-import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-my-task-submission',
@@ -17,6 +16,7 @@ import {Subject} from 'rxjs';
 export class MyTaskSubmissionComponent implements OnInit, OnChanges {
 
   API_ROUTES = CoreConstant.APP_ROUTES;
+  TASK_TYPE = TASK_TYPE;
   submissionTaskDynamicFormModel: DynamicFormModel[] = [...myTaskSubmissionDynamicFormModel];
 
   @Output() taskSubmission: EventEmitter<Task> = new EventEmitter<Task>();
@@ -26,6 +26,7 @@ export class MyTaskSubmissionComponent implements OnInit, OnChanges {
   responseMessage: string;
   hasError: boolean;
   isFormReset = false;
+  customFormConfig: CustomFormConfig;
 
   isAssignedToMe: boolean;
 
@@ -33,6 +34,14 @@ export class MyTaskSubmissionComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.initProcessTask(this.task);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('task set changed');
+    if (this.task != null) {
+      this.initProcessTask(this.task);
+    }
   }
 
   onTaskSubmissionFormSubmit(taskForm: FormGroup): void {
@@ -48,6 +57,7 @@ export class MyTaskSubmissionComponent implements OnInit, OnChanges {
       this.taskSubmission.emit(value.response);
     }, error => {
       this.responseMessage = error.error.response;
+      this.taskSubmission.emit(null);
       this.clearStatesAfterFormSubmit(false);
     });
   }
@@ -73,19 +83,15 @@ export class MyTaskSubmissionComponent implements OnInit, OnChanges {
     this.isLoading = false;
   }
 
-  initIsAssignedToMe(task: Task): void {
+  initProcessTask(task: Task): void {
     const currentUser: User = this.authService.getCurrentUser();
     if (task.assignedTo.id === currentUser.id) {
       this.isAssignedToMe = true;
+      // if (this.task.taskType === TASK_TYPE.AUDIO) {
+      //   this.customFormConfig = {disableAll: true};
+      // }
     } else {
       this.isAssignedToMe = false;
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('task set changed');
-    this.initIsAssignedToMe(this.task);
-    if (this.task != null) {
     }
   }
 

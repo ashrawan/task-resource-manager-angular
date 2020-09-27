@@ -50,6 +50,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     this.hasError = false;
     this.createdTask = null;
     this.isLoading = true;
+    this.isFormReset = false;
   }
 
   clearStatesAfterFormSubmit(isSuccess: boolean): void {
@@ -65,11 +66,6 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
 
   closeAlert(): void {
     this.responseMessage = null;
-  }
-
-  onUpload(e): any {
-    console.log(e);
-
   }
 
   ngOnDestroy(): void {

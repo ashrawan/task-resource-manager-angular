@@ -1,10 +1,10 @@
 <div class="row">
 
-  <div class="col-4">
+  <div class="col-5">
     <app-my-task-board-list (taskSelected)="onTaskSet($event)"></app-my-task-board-list>
   </div>
 
-  <div class="col-8">
+  <div class="col-7">
 
     <app-card>
       <div class="card-header">
@@ -19,13 +19,23 @@
 
 </div>
 
+<ng-container *ngTemplateOutlet="messageBlock"></ng-container>
 
-<div *ngIf="selectedTask" class="row">
+<div *ngIf="editTask" class="row">
 
   <div class="col-12">
     <div class="card-body">
-      <app-my-task-submission [task]="selectedTask"></app-my-task-submission>
+      <app-my-task-submission [task]="editTask" (taskSubmission)="taskSubmission($event)"></app-my-task-submission>
     </div>
   </div>
 
 </div>
+
+<ng-template #messageBlock>
+  <div *ngIf="!!responseMessage">
+
+    <ngb-alert [type]="hasError ? 'danger' : 'info'" (close)="closeAlert()">
+      {{ responseMessage }}
+    </ngb-alert>
+  </div>
+</ng-template>

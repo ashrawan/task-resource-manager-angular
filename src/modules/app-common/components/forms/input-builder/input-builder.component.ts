@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
-import {FieldValidate, FormFieldModel} from '../../inputs/input.model';
+import {CustomFormConfig, FieldValidate, FormFieldModel} from '../../inputs/input.model';
 
 @Component({
   selector: 'app-input-builder',
@@ -11,6 +11,7 @@ export class InputBuilderComponent implements OnInit {
 
   @Input() formField: FormFieldModel;
   @Input() formGroup: FormGroup;
+  @Input() customFormConfig: CustomFormConfig;
 
   get isValid(): boolean {
     return this.formGroup.controls[this.formField.name].valid;

@@ -11,7 +11,7 @@
     <!--    <app-checkbox *ngSwitchCase="'checkbox'" [field]="formField" [form]="formGroup"></app-checkbox>-->
     <!--    <app-radio *ngSwitchCase="'radio'" [field]="formField" [form]="formGroup"></app-radio>-->
     <app-file *ngSwitchCase="'file'" [field]="formField" [form]="formGroup"></app-file>
-    <app-custom-resource-file *ngSwitchCase="'CUSTOM_RESOURCE_UPLOAD'" [field]="formField" [form]="formGroup"></app-custom-resource-file>
+    <app-custom-resource-file [customFormConfig]="customFormConfig" *ngSwitchCase="'CUSTOM_RESOURCE_UPLOAD'" [field]="formField" [form]="formGroup"></app-custom-resource-file>
 
   </ng-container>
 

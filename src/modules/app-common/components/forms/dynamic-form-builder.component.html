@@ -28,6 +28,7 @@
             <h4 class="col-12">{{formField.label}}</h4>
             <div [ngClass]="dynamicFormGroup.className ? dynamicFormGroup.className : 'col-12'">
               <app-dynamic-form-builder [isChildForm]="true"
+                                        [customFormConfig]="customFormConfig"
                                         [currentForm]="currentForm.get(formField.name)"
                                         [resetForm]="resetForm"
                                         [patchValue]="patchValue[formField.name]"
@@ -39,6 +40,7 @@
           <ng-container *ngIf="formField.type !== 'none' && !formField.subFormGroup">
             <div *ngIf="!formField.isReadOnly" [ngClass]="formField.className ? formField.className: 'col-12'">
               <app-input-builder [formField]="formField"
+                                 [customFormConfig]="customFormConfig"
                                  [formGroup]="currentForm">
               </app-input-builder>
             </div>

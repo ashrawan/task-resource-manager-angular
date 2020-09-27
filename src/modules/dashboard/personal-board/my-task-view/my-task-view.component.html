@@ -21,9 +21,9 @@
 
 
   <div class="row border-top">
-    <div class="col-6 mt-3">
+    <div class="col-4 mt-3">
 
-      <div *ngIf="task.assignedTo" class="col-6 border-right">
+      <div *ngIf="task.assignedTo" class="col-12 border-right">
         <h5 class="text-success">Assigned To</h5>
         <p><span>Full Name: </span>
           <a class="pl-2 btn-link" [routerLink]="API_ROUTES.USER_DETAILS + '/' + task.assignedTo.id">
@@ -33,7 +33,7 @@
         <p>Status: {{task.assignedTo.status}}</p>
       </div>
 
-      <div *ngIf="task.reportTo" class="col-6">
+      <div *ngIf="task.reportTo" class="col-12">
         <h5 class="text-success">Report To</h5>
         <p>Full Name:
           <a class="pl-2 btn-link" [routerLink]="API_ROUTES.USER_DETAILS + '/' + task.reportTo.id">
@@ -45,13 +45,20 @@
 
     </div>
 
-    <div *ngIf="task.taskResources.length > 0" class="col-6">
+    <div *ngIf="task.taskResources.length > 0" class="col-8 p-1">
       <ol>
         <ng-container *ngFor="let resource of task.taskResources; let i= index">
-          <li (click)="downloadResource(resource)" class="btn-link">
-            {{ resource.resourceName }}
-            <fa-icon [icon]='["fas", "download"]'></fa-icon>
-          </li>
+          <div class="d-flex flex-row mb-2 border p-2">
+            <span class="border p-2 bg-secondary text-white mr-2">{{i + 1}}</span>
+            <span class="h6 btn-link flex-grow-1 align-self-center cursor-pointer" (click)="downloadResource(resource, true)">
+              s{{ resource.resourceName }} </span>
+            <button class="btn btn-secondary btn-sm cursor-pointer" (click)="downloadResource(resource, true)">
+              <fa-icon [icon]='["fas", "table"]'></fa-icon> View
+            </button>
+            <button class="ml-1 btn btn-secondary btn-sm cursor-pointer" (click)="downloadResource(resource, false)">
+              <fa-icon [icon]='["fas", "download"]'></fa-icon> Download
+            </button>
+          </div>
         </ng-container>
       </ol>
     </div>

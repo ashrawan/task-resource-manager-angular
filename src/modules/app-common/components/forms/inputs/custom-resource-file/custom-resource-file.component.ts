@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {FormFieldModel, InputCustomResources} from '../../../inputs/input.model';
+import {CustomFormConfig, FormFieldModel, InputCustomResources} from '../../../inputs/input.model';
 import {FormGroup} from '@angular/forms';
 import {ResourceService} from '../../../../services/apis/resource.service';
 import {ResourceInfo} from '../../../../services/model';
@@ -17,10 +17,15 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
 
   @Input() field: FormFieldModel;
   @Input() form: FormGroup;
+  @Input() customFormConfig: CustomFormConfig;
 
   triggerRefresh: Subject<void> = new Subject<void>();
   myTaskDataGridConfigurer!: AbstractDataConfigurer<ResourceInfo>;
 
+  TABS = {ALL: 'ALL', AUDIO: 'AUDIO'};
+  currentView: string = this.TABS.ALL;
+
+  isUploaded: boolean;
   uploadProgressValue: number;
   fileSelectionResponseMsg: string;
   isHovering: boolean;
@@ -36,7 +41,8 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('custom file on changes');
+    this.currentView = this.customFormConfig && this.customFormConfig.disableAll ? this.TABS.AUDIO : this.TABS.ALL;
+    this.initResourcesFromFormPatch();
   }
 
   ngOnInit(): void {
@@ -50,10 +56,23 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
   initResourcesFromFormPatch(): void {
     const formFilesValue = this.form.controls[this.field.name].value;
     this.resourceInfos = formFilesValue;
+    this.validateResourceRequired();
+    console.log('custom form config ', this.customFormConfig);
     this.form.controls[this.field.name].valueChanges.subscribe(selectedValue => {
       console.log('custom file form value changed', selectedValue);
       this.resourceInfos = selectedValue;
+      this.validateResourceRequired();
     });
+  }
+
+  private validateResourceRequired(): void {
+    console.log('is empty resource ', this.resourceInfos);
+    const isResourcesEmpty: boolean = this.resourceInfos == null || this.resourceInfos.length < 1;
+    if (this.field.fieldValidators && this.field.fieldValidators.required && isResourcesEmpty) {
+      this.fileSelectionResponseMsg = 'Please Select resource';
+    } else {
+      this.fileSelectionResponseMsg = null;
+    }
   }
 
   toggleHover($event): void {
@@ -77,10 +96,13 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
   clearStatesAfterFormSubmit(isSuccess: boolean): void {
     if (isSuccess) {
       this.hasError = false;
+      this.isUploaded = true;
     } else {
       this.hasError = true;
+      this.isUploaded = false;
     }
     this.isLoading = false;
+    this.validateResourceRequired();
   }
 
   onGridResourceSelection(opDataEmit: OpDataEmit): void {
@@ -112,11 +134,13 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
     // console.log('spliced data ', splicedData);
     this.form.controls[this.field.name].patchValue(this.resourceInfos);
     this.fileSelectionResponseMsg = null;
+    this.validateResourceRequired();
   }
 
   clearAllSelectedFiles(): void {
     this.form.controls[this.field.name].patchValue([]);
     this.fileSelectionResponseMsg = null;
+    this.validateResourceRequired();
   }
 
   onFileChange(event): void {
@@ -125,6 +149,10 @@ export class CustomResourceFileComponent implements OnInit, OnChanges, OnDestroy
       const singleFile = event.target.files[0];
       this.submit(singleFile);
     }
+  }
+
+  onAudioUpload(file: File): void {
+    this.submit(file);
   }
 
   submit(singleFile: any): void {

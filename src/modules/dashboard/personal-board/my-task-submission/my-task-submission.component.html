@@ -4,17 +4,17 @@
     <div class="card-header">{{'Submit Task'}}</div>
 
     <div class="card-body">
-
       <ng-container *ngTemplateOutlet="messageBlock"></ng-container>
       <app-dynamic-form-builder *ngIf="task"
                                 [dynamicFormModel]="submissionTaskDynamicFormModel"
                                 [isUpdate]="true"
                                 [patchValue]="task"
                                 [resetForm]="isFormReset"
+                                [customFormConfig]="customFormConfig"
                                 (formSubmit)="onTaskSubmissionFormSubmit($event)">
       </app-dynamic-form-builder>
-
     </div>
+
   </div>
 
 </div>

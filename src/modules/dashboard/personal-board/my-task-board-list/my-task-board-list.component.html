@@ -1,4 +1,28 @@
-<app-table [gridTitle]="'My Task'"
-           [dataGridConfigurer]="myTaskDataGridConfigurer"
-           (rowSelected)="onTaskSelected($event)">
-</app-table>
+<app-card>
+  <div class="card-header">
+    <div class="d-flex">
+      <span><fa-icon class="mr-1" [icon]='["fas", "table"]'></fa-icon>My Task</span>
+
+      <span class="flex-grow-1"></span>
+      <div class="form-group">
+        <select
+          name="submissionStatus"
+          class="form-control"
+          [(ngModel)]="taskByValue" (ngModelChange)="onSelectChange()">
+          <option *ngFor="let taskBY of taskByList" [value]="taskBY.value">{{ taskBY.key }}</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card-body">
+    <app-table [gridTitle]="'My Task'"
+               [disableCardWrapper]="true"
+               [triggerRefresh]="triggerTaskRefresh"
+               [dataGridConfigurer]="myTaskDataGridConfigurer"
+               (rowSelected)="onTaskSelected($event)">
+    </app-table>
+  </div>
+
+</app-card>
